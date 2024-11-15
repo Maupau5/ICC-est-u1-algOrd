@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class App {
 
-    // Tamaños de los arreglos a probar
+    // Tamaños de los arreglos
     private static final int[] SIZES = {10, 100, 1000, 5000, 10000, 30000};
     private static final int MAX_VALUE = 30000;
     private static int[][] arrays = new int[SIZES.length][]; // Arreglos generados
@@ -43,10 +43,10 @@ public class App {
         scanner.close();
     }
 
-    // Genera arreglos aleatorios y asegura que cada arreglo es un subconjunto del siguiente
+    // Genera arreglos aleatorios 
     private static void generateRandomArrays() {
         Random rand = new Random();
-        int[] baseArray = new int[SIZES[SIZES.length - 1]]; // Arreglo de tamaño máximo
+        int[] baseArray = new int[SIZES[SIZES.length - 1]]; 
         for (int i = 0; i < baseArray.length; i++) {
             baseArray[i] = rand.nextInt(MAX_VALUE) + 1;
         }
@@ -55,12 +55,12 @@ public class App {
         }
     }
 
-    // Realiza el ordenamiento de cada arreglo con los 3 métodos y mide el tiempo
+    // Realiza el ordenamiento de cada arreglo con los 3 métodos
     private static void sortAndMeasureTimes() {
         for (String methodName : new String[]{"Burbuja con Ajuste", "Selección", "Inserción"}) {
             System.out.println("Método " + methodName);
             for (int i = 0; i < SIZES.length; i++) {
-                int[] testArray = Arrays.copyOf(arrays[i], arrays[i].length); // Copia del arreglo original
+                int[] testArray = Arrays.copyOf(arrays[i], arrays[i].length); 
 
                 Runnable sortingMethod;
                 switch (methodName) {
@@ -84,14 +84,14 @@ public class App {
         }
     }
 
-    // Realiza la búsqueda de un valor específico utilizando búsqueda binaria normal y recursiva
+    // Realiza la búsqueda de un valor específico 
     private static void searchAndMeasureTimes(Scanner scanner) {
         System.out.print("Ingrese el valor a buscar: ");
         int value = scanner.nextInt();
         
         for (int i = 0; i < SIZES.length; i++) {
             int[] sortedArray = Arrays.copyOf(arrays[i], arrays[i].length);
-            Arrays.sort(sortedArray); // Asegurarse de que el arreglo esté ordenado para la búsqueda binaria
+            Arrays.sort(sortedArray); 
 
             double normalTime = measureTime(() -> binarySearch(sortedArray, value));
             double recursiveTime = measureTime(() -> binarySearchRecursive(sortedArray, value, 0, sortedArray.length - 1));
