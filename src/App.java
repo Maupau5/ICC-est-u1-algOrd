@@ -5,14 +5,14 @@ import java.util.Scanner;
 public class App {
 
     // Tamaños de los arreglos
-    private static final int[] SIZES = {10, 100, 1000, 5000, 10000, 30000};
+    private static final int[] SIZES = { 10, 100, 1000, 5000, 10000, 30000 };
     private static final int MAX_VALUE = 30000;
     private static int[][] arrays = new int[SIZES.length][]; // Arreglos generados
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
-        
+
         while (!exit) {
             System.out.println("Seleccione una opción:");
             System.out.println("1. Generar Arreglos Aleatorios");
@@ -20,7 +20,7 @@ public class App {
             System.out.println("3. Buscar valores (Búsqueda Binaria Normal y Recursiva)");
             System.out.println("4. Salir");
             int option = scanner.nextInt();
-            
+
             switch (option) {
                 case 1:
                     generateRandomArrays();
@@ -43,10 +43,10 @@ public class App {
         scanner.close();
     }
 
-    // Genera arreglos aleatorios 
+    // Genera arreglos aleatorios
     private static void generateRandomArrays() {
         Random rand = new Random();
-        int[] baseArray = new int[SIZES[SIZES.length - 1]]; 
+        int[] baseArray = new int[SIZES[SIZES.length - 1]];
         for (int i = 0; i < baseArray.length; i++) {
             baseArray[i] = rand.nextInt(MAX_VALUE) + 1;
         }
@@ -57,15 +57,15 @@ public class App {
 
     // Realiza el ordenamiento de cada arreglo con los 3 métodos
     private static void sortAndMeasureTimes() {
-        for (String methodName : new String[]{"Burbuja con Ajuste", "Selección", "Inserción"}) {
+        for (String methodName : new String[] { "Burbuja con Ajuste", "Selección", "Inserción" }) {
             System.out.println("Método " + methodName);
             for (int i = 0; i < SIZES.length; i++) {
-                int[] testArray = Arrays.copyOf(arrays[i], arrays[i].length); 
+                int[] testArray = Arrays.copyOf(arrays[i], arrays[i].length);
 
                 Runnable sortingMethod;
                 switch (methodName) {
                     case "Burbuja con Ajuste":
-                        sortingMethod = () -> bubbleSort(testArray);
+                        sortingMethod = () -> bubbleSortWithAdjustment(testArray);
                         break;
                     case "Selección":
                         sortingMethod = () -> selectionSort(testArray);
@@ -84,18 +84,19 @@ public class App {
         }
     }
 
-    // Realiza la búsqueda de un valor específico 
+    // Realiza la búsqueda de un valor específico
     private static void searchAndMeasureTimes(Scanner scanner) {
         System.out.print("Ingrese el valor a buscar: ");
         int value = scanner.nextInt();
-        
+
         for (int i = 0; i < SIZES.length; i++) {
             int[] sortedArray = Arrays.copyOf(arrays[i], arrays[i].length);
-            Arrays.sort(sortedArray); 
+            Arrays.sort(sortedArray);
 
             double normalTime = measureTime(() -> binarySearch(sortedArray, value));
-            double recursiveTime = measureTime(() -> binarySearchRecursive(sortedArray, value, 0, sortedArray.length - 1));
-            
+            double recursiveTime = measureTime(
+                    () -> binarySearchRecursive(sortedArray, value, 0, sortedArray.length - 1));
+
             System.out.printf("En arreglo de tamaño %d:%n", SIZES[i]);
             System.out.printf("  Búsqueda binaria normal tiempo: %.4f seg.%n", normalTime);
             System.out.printf("  Búsqueda binaria recursiva tiempo: %.4f seg.%n", recursiveTime);
@@ -103,15 +104,17 @@ public class App {
     }
 
     // Métodos de ordenamiento
-    private static void bubbleSort(int[] arr) {
+    private static void bubbleSortWithAdjustment(int[] arr) {
         int n = arr.length;
+        boolean swapped;
         for (int i = 0; i < n - 1; i++) {
+            swapped = false;
             for (int j = 0; j < n - 1 - i; j++) {
                 if (arr[j] > arr[j + 1]) {
                     int temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
-                }
+                }           
             }
         }
     }
@@ -149,19 +152,25 @@ public class App {
         int left = 0, right = arr.length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (arr[mid] == value) return mid;
-            if (arr[mid] < value) left = mid + 1;
-            else right = mid - 1;
+            if (arr[mid] == value)
+                return mid;
+            if (arr[mid] < value)
+                left = mid + 1;
+            else
+                right = mid - 1;
         }
         return -1;
     }
 
     // Búsqueda binaria recursiva
     private static int binarySearchRecursive(int[] arr, int value, int left, int right) {
-        if (left > right) return -1;
+        if (left > right)
+            return -1;
         int mid = left + (right - left) / 2;
-        if (arr[mid] == value) return mid;
-        if (arr[mid] < value) return binarySearchRecursive(arr, value, mid + 1, right);
+        if (arr[mid] == value)
+            return mid;
+        if (arr[mid] < value)
+            return binarySearchRecursive(arr, value, mid + 1, right);
         return binarySearchRecursive(arr, value, left, mid - 1);
     }
 
